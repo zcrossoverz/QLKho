@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Login from "../pages/login";
+import Dashboard from "../pages/dashboard";
 
 function Home() {
     return (
@@ -36,6 +37,7 @@ const publicRoutes = [
     { path:"/", component: Home },
     { path:"/about", component: About },
     { path:"/login", component: Login },
+    { path:"/dashboard", component: Dashboard },
 ];
 
 const privateRoutes = [
