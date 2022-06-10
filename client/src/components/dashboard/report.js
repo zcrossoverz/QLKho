@@ -43,7 +43,7 @@ export default function Report() {
         <div className='flex justify-between items-center pb-4'>
             <h2 className='text-xl font-semibold leading-loose text-white'>Hoạt Động</h2>
         </div>
-        <table className=' w-full'>
+        <table className='w-full'>
             <thead className='text-sm font-semibold text-white'>
                 <tr>
                     <td className='py-4 border-b border-gray-700'></td>

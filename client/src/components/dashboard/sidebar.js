@@ -3,20 +3,21 @@ import { ArchiveIcon } from '@heroicons/react/solid'
 import { HomeIcon, OfficeBuildingIcon, IdentificationIcon, CurrencyDollarIcon, TruckIcon, FilterIcon, PlusCircleIcon, AdjustmentsIcon } from '@heroicons/react/outline'
 import { useNavigate } from 'react-router-dom';
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 
-    const [activeTab, setActiveTab] = useState(0);
+
+    const [activeTab, setActiveTab] = useState(props.active);
     let navigate = useNavigate();
 
     const listNav = [
         { icon: HomeIcon, path:"/dashboard" },
         { icon: TruckIcon, path:"/dashboard" },
-        { icon: CurrencyDollarIcon, path:"/dashboard" },
+        { icon: CurrencyDollarIcon, path:"/donvitinh" },
         { icon: OfficeBuildingIcon, path:"/dashboard" },
         { icon: IdentificationIcon, path:"/dashboard" },
         { icon: FilterIcon, path:"/dashboard" },
         { icon: PlusCircleIcon, path:"/dashboard" },
-        // { icon: AdjustmentsIcon, path:"/dashboard" },
+        { icon: AdjustmentsIcon, path:"/dashboard" },
     ];
 
     let Button = (props) => {
