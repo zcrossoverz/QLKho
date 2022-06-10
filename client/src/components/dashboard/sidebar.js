@@ -10,14 +10,14 @@ export default function Sidebar(props) {
     let navigate = useNavigate();
 
     const listNav = [
-        { icon: HomeIcon, path:"/dashboard" },
-        { icon: TruckIcon, path:"/dashboard" },
+        { icon: HomeIcon, path:"/" },
+        { icon: TruckIcon, path:"/hanghoa" },
         { icon: CurrencyDollarIcon, path:"/donvitinh" },
-        { icon: OfficeBuildingIcon, path:"/dashboard" },
-        { icon: IdentificationIcon, path:"/dashboard" },
-        { icon: FilterIcon, path:"/dashboard" },
-        { icon: PlusCircleIcon, path:"/dashboard" },
-        { icon: AdjustmentsIcon, path:"/dashboard" },
+        { icon: OfficeBuildingIcon, path:"/nhacungcap" },
+        { icon: IdentificationIcon, path:"/khachhang" },
+        { icon: FilterIcon, path:"/danhmuc" },
+        { icon: PlusCircleIcon, path:"/donhang" },
+        { icon: AdjustmentsIcon, path:"/taikhoan" },
     ];
 
     let Button = (props) => {

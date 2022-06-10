@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/dashboard/sidebar'
 import HeaderDashboard from '../../components/header';
-import { timeNow } from '../../utils/getTime';
 
-export default function Donvitinh() {
 
+export default function Danhmuc() {
 
   let navigate = useNavigate();
 
@@ -35,15 +34,15 @@ export default function Donvitinh() {
 
   return (
     <div className='flex w-full min-h-screen bg-gray-800 gap-y-4'>
-      <Sidebar active={2} />
+      <Sidebar active={5} />
       <div className='flex flex-col flex-1 gap-6 p-4'>
-        <HeaderDashboard title="Đơn vị tính" />
+        <HeaderDashboard title="Danh mục" />
         <hr className='border-gray-700' />
         <div className='p-6 bg-gray-900 rounded-lg'>
           <div className='flex justify-between items-center pb-4 w-full'>
-            <h2 className='text-xl font-semibold leading-loose text-white'>Danh Sách Đơn Vị Tính</h2>
+            <h2 className='text-xl font-semibold leading-loose text-white'>Danh Sách Danh Mục</h2>
             <button className='bg-pink-700 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-600 hover:shadow-pink leading-loose' onClick={() => {
-              navigate("/donvitinh/them", { replace:false });
+              navigate("/danhmuc/them", { replace:false });
             }}>Thêm</button>
           </div>
           <table className='w-full'>
