@@ -10,7 +10,7 @@ const setupCategoryRoutes = require("./app/routes/category.route");
 const setupProviderRoutes = require("./app/routes/provider.route");
 const setupCustomerRoutes = require("./app/routes/customer.route");
 
-// app.use(cors({ origin: config.app.origin })); 
+app.use(cors()); 
 
 app.use(express.json());
 
