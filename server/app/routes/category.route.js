@@ -8,6 +8,7 @@ module.exports = (app) => {
     router.get("/", category.list);
     router.put("/:id", category.update);
     router.delete("/:id", category.delete);
+    router.get("/:id", category.getOne);
 
     app.use("/api/category", router);
 }

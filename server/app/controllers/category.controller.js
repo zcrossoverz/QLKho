@@ -38,4 +38,12 @@ exports.list = async (req, res, next) => {
         if(err) next(new BadRequestError(500, "Lỗi khi truy vấn dữ liệu"));
         res.send(rows);
     });
-}
+};
+
+// get one
+exports.getOne = async (req, res, next) => {
+    pool.execute(`SELECT * FROM danhmuc WHERE id=${req.params.id}`,(err, rows) => {
+        if(err) return next(new BadRequestError(500, "Lỗi khi lấy dữ liệu"));
+        res.send(rows[0]);
+    });
+};

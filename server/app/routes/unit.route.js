@@ -8,6 +8,7 @@ module.exports = (app) => {
     router.get("/", unit.list);
     router.put("/:id", unit.update);
     router.delete("/:id", unit.delete);
+    router.get("/:id", unit.getOne);
 
     app.use("/api/unit", router);
 }

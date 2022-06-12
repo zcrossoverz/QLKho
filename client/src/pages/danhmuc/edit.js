@@ -3,17 +3,17 @@ import { useParams } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import Sidebar from '../../components/dashboard/sidebar'
 import HeaderDashboard from '../../components/header';
-import * as donvitinhServices from "../../services/donvitinhServices";
+import * as danhmucServices from "../../services/danhmucServices";
 import { succesToast } from '../../utils/toast';
 
-export default function EditDonvitinh() {
+export default function EditDanhmuc() {
   let { id } = useParams();
 
   const [name,setName] = useState("");
   const [newName, setNewName] = useState("");
 
   const getData = async () => {
-    const res = await donvitinhServices.getOne(id);
+    const res = await danhmucServices.getOne(id);
     setNewName(res.name);
     setName(res.name);
   };
@@ -23,7 +23,7 @@ export default function EditDonvitinh() {
   },[]);
 
   const edit = async () => {
-    const res = await donvitinhServices.edit(id, newName);
+    const res = await danhmucServices.edit(id, newName);
     if(res.message === 'success') succesToast("Cập nhật thành công");
     getData();
   };
@@ -34,13 +34,13 @@ export default function EditDonvitinh() {
   return (
     <div className='flex w-full min-h-screen bg-gray-800 gap-y-4'>
       <ToastContainer />
-      <Sidebar active={2} />
+      <Sidebar active={5} />
       <div className='flex flex-col flex-1 gap-6 p-4'>
-        <HeaderDashboard title="Đơn vị tính"/>
+        <HeaderDashboard title="Danh mục"/>
         <hr className='border-gray-700' />
         <div className='p-6 bg-gray-900 rounded-lg w-1/3'>
           <div className='flex justify-between items-center pb-4 w-full'>
-            <h2 className='text-xl font-semibold leading-loose text-white'>Sửa Đơn Vị Tính</h2>
+            <h2 className='text-xl font-semibold leading-loose text-white'>Sửa Thông tin Danh Mục</h2>
           </div>
           <div>
             <p className='text-white leading-loose'>ID</p>

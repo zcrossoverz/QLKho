@@ -85,10 +85,10 @@ export default function Donvitinh() {
 
   return (
     <div className="flex w-full min-h-screen bg-gray-800 gap-y-4">
+      <ToastContainer />
       <Sidebar active={2} />
       <div className="flex flex-col flex-1 gap-6 p-4">
         <HeaderDashboard title="Đơn vị tính" />
-        <ToastContainer />
         <hr className="border-gray-700" />
         <div className="flex gap-6">
 

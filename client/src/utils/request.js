@@ -20,4 +20,9 @@ export const _delete = async (path, options = {}) => {
     return response.data;
 };
 
+export const put = async (path, options = {}) => {
+    const response = await request.put(path, options);
+    return response.data;
+};
+
 export default request;

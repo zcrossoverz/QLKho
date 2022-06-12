@@ -14,7 +14,7 @@ export default function Danhmuc() {
 
 
   const [data, setData] = useState([]);
-  const getListUnit = async () => {
+  const getListCategory = async () => {
     try {
       const res = await danhmucService.list();
       setData(res);
@@ -24,27 +24,27 @@ export default function Danhmuc() {
   };
 
   useEffect(() => {
-    getListUnit();
+    getListCategory();
   }, []);
 
 
-  const [newUnit, setNewUnit] = useState('');
+  const [newCategory, setnewCategory] = useState('');
 
   const addUnit = (e) => {
     e.preventDefault();
-    const addNewUnit = async (name) => {
+    const addnewCategory = async (name) => {
       try {
         const res = await danhmucService.create(name);
         if(res.message === 'success') {
           succesToast("Thêm danh mục thành công!!");
-          getListUnit();
+          getListCategory();
         }
       } catch (error) {
         console.log(error);
       }
     };
-    addNewUnit(newUnit);
-    setNewUnit('');
+    addnewCategory(newCategory);
+    setnewCategory('');
   };
 
 
@@ -52,7 +52,7 @@ export default function Danhmuc() {
     try {
       const res = await danhmucService.deleteCategory(id);
       if(res.message === 'success') {
-        getListUnit();
+        getListCategory();
         succesToast("Xóa thành công!");
       }
     } catch (error) {
@@ -67,7 +67,12 @@ export default function Danhmuc() {
         <td className="text-white">{props.name}</td>
         <td className="text-white flex items-center m-2">
           <button className="hover:text-green-600 p-4">
-            <PencilIcon className="h-5" />
+            <PencilIcon className="h-5"
+            onClick={() => {
+              navigate(`/danhmuc/edit/${props.id}`, { replace:true });
+            }}
+
+            />
           </button>
           <button className="hover:text-red-600 p-4">
             <TrashIcon className="h-5" onClick={() => {
@@ -81,10 +86,10 @@ export default function Danhmuc() {
 
   return (
     <div className="flex w-full min-h-screen bg-gray-800 gap-y-4">
+      <ToastContainer />
       <Sidebar active={5} />
       <div className="flex flex-col flex-1 gap-6 p-4">
         <HeaderDashboard title="Danh mục" />
-        <ToastContainer />
         <hr className="border-gray-700" />
         <div className="flex gap-6">
 
@@ -122,14 +127,14 @@ export default function Danhmuc() {
               <form className="mt-4 flex flex-col" onSubmit={addUnit}>
                 <p className="text-white">Tên danh mục:</p>
                 <input className="my-4 outline-none w-64 py-3 px-2 rounded-lg text-gray-800 bg-gray-100" 
-                  value={newUnit}
+                  value={newCategory}
                   onChange={(e) => {
-                    setNewUnit(e.target.value);
+                    setnewCategory(e.target.value);
                  }}/>
                 <button
                 type="submit"
-                disabled={!newUnit}
-                className={!newUnit ? "w-44 bg-gray-700 px-10 py-2 rounded-lg text-gray-100 leading-loose" : "w-44 bg-pink-800 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-500 hover:shadow-pink leading-loose" }>
+                disabled={!newCategory}
+                className={!newCategory ? "w-44 bg-gray-700 px-10 py-2 rounded-lg text-gray-100 leading-loose" : "w-44 bg-pink-800 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-500 hover:shadow-pink leading-loose" }>
                 Thêm
               </button>
               </form>
