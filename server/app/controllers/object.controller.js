@@ -49,7 +49,7 @@ exports.delete = async (req, res, next) => {
 
 // list hàng hóa
 exports.list = (req, res, next) => {
-    pool.execute("SELECT * FROM hanghoa", (err, rows) => {
+    pool.execute("SELECT hanghoa.id id, hanghoa.name name, donvitinh.name name_dvt, hanghoa.giabanle giabanle, hanghoa.giabansi giabansi, hanghoa.gianhap gianhap, nhacungcap.name name_ncc, danhmuc.name name_dm FROM hanghoa LEFT JOIN donvitinh ON hanghoa.idDVT=donvitinh.id LEFT JOIN danhmuc ON hanghoa.idDM=danhmuc.id LEFT JOIN nhacungcap ON hanghoa.idNCC=nhacungcap.id", (err, rows) => {
         if(err) return next(new BadRequestError(500, "Lỗi khi lấy dữ liệu trong database"));
         res.send(rows);
     });

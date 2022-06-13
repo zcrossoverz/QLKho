@@ -62,7 +62,7 @@ export default function ThemNhacungcap() {
       <ToastContainer />
       <Sidebar active={3} />
       <div className="flex flex-col flex-1 gap-6 p-4">
-        <HeaderDashboard title="Thêm nhà cung cấp" />
+        <HeaderDashboard title="Nhà cung cấp" />
         <hr className="border-gray-700" />
         <div className="p-6 bg-gray-900 rounded-lg w-1/2">
           <div className="flex justify-between items-center pb-4 w-full">

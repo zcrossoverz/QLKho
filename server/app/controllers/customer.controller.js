@@ -35,7 +35,7 @@ exports.update = async (req, res, next) => {
     let ngayhoptac = req.body.ngayhoptac;
     if(!name || !sdt || !diachi || !email || !ngayhoptac) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
     
-    pool.execute(`UPDATE khachhang SET name='${name}',sdt=${sdt},diachi='${diachi}',email='${email}',ngayhoptac=DATE('${ngayhoptac}')`, (err) => {
+    pool.execute(`UPDATE khachhang SET name='${name}',sdt=${sdt},diachi='${diachi}',email='${email}',ngayhoptac=DATE('${ngayhoptac}') WHERE id=${req.params.id}`, (err) => {
         if(err) return next(new BadRequestError(500, "Lỗi khi cập nhật dữ liệu"));
         res.send({message:"success"});
     })

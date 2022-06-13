@@ -7,9 +7,9 @@ import DatePicker from "react-datepicker";
 import formatDate from "../../utils/formatDay";
 import { errorToast, succesToast } from "../../utils/toast";
 import { validateEmail, validatePhone } from "../../utils/validator";
-import * as nhacungcapService from "../../services/nhacungcapServices";
+import * as khachhangServices from "../../services/khachhangServices";
 
-export default function DetailNhacungcap() {
+export default function ThemKhachhang() {
   const [name, setName] = useState("");
   const [sdt, setSdt] = useState(84);
   const [diachi, setDiachi] = useState("");
@@ -36,7 +36,7 @@ export default function DetailNhacungcap() {
   };
 
   const addNew = async (name, sdt, diachi, email, ngayhoptac) => {
-    const res = await nhacungcapService.create(
+    const res = await khachhangServices.create(
       name,
       sdt,
       diachi,
@@ -60,14 +60,14 @@ export default function DetailNhacungcap() {
   return (
     <div className="flex w-full min-h-screen bg-gray-800 gap-y-4">
       <ToastContainer />
-      <Sidebar active={3} />
+      <Sidebar active={4} />
       <div className="flex flex-col flex-1 gap-6 p-4">
-        <HeaderDashboard title="Thêm nhà cung cấp" />
+        <HeaderDashboard title="Khách hàng" />
         <hr className="border-gray-700" />
         <div className="p-6 bg-gray-900 rounded-lg w-1/2">
           <div className="flex justify-between items-center pb-4 w-full">
             <h2 className="text-xl font-semibold leading-loose text-white">
-              Thêm Nhà Cung Cấp
+              Thêm Khách Hàng
             </h2>
           </div>
           <form className="mt-4 flex flex-col" onSubmit={handleForm}>

@@ -10,7 +10,11 @@ import Taikhoan from "../pages/taikhoan";
 import EditDonvitinh from "../pages/donvitinh/edit";
 import EditDanhmuc from "../pages/danhmuc/edit";
 import EditNhacungcap from "../pages/nhacungcap/edit";
-import DetailNhacungcap from "../pages/nhacungcap/chitiet";
+import ThemNhacungcap from "../pages/nhacungcap/them";
+import ThemKhachhang from "../pages/khachhang/them";
+import EditKhachhang from "../pages/khachhang/edit";
+import ThemHanghoa from "../pages/hanghoa/them";
+import EditHanghoa from "../pages/hanghoa/edit";
 
 
 
@@ -23,9 +27,13 @@ const publicRoutes = [
     { path:"/danhmuc/edit/:id", component: EditDanhmuc },
     { path:"/donhang", component: Donhang },
     { path:"/hanghoa", component: Hanghoa },
+    { path:"/hanghoa/them", component: ThemHanghoa },
+    { path:"/hanghoa/edit/:id", component: EditHanghoa },
     { path:"/khachhang", component: Khachhang },
+    { path:"/khachhang/them", component: ThemKhachhang },
+    { path:"/khachhang/edit/:id", component: EditKhachhang },
     { path:"/nhacungcap", component: Nhacungcap },
-    { path:"/nhacungcap/:id", component: DetailNhacungcap },
+    { path:"/nhacungcap/them", component: ThemNhacungcap },
     { path:"/nhacungcap/edit/:id", component: EditNhacungcap },
     { path:"/taikhoan", component: Taikhoan },
 ];

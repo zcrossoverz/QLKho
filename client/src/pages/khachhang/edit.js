@@ -7,10 +7,10 @@ import DatePicker from "react-datepicker";
 import formatDate from "../../utils/formatDay";
 import { errorToast, succesToast } from "../../utils/toast";
 import { validateEmail, validatePhone } from "../../utils/validator";
-import * as nhacungcapService from "../../services/nhacungcapServices";
+import * as khachhangServices from "../../services/khachhangServices";
 import { useParams } from "react-router-dom";
 
-export default function EditNhacungcap() {
+export default function EditKhachhang() {
   const [name, setName] = useState("");
   const [sdt, setSdt] = useState("");
   const [diachi, setDiachi] = useState("");
@@ -39,7 +39,7 @@ export default function EditNhacungcap() {
   };
 
   const getInfo = async () => {
-    const res = await nhacungcapService.getOne(id);
+    const res = await khachhangServices.getOne(id);
     setName(res.name);
     setDiachi(res.diachi);
     setEmail(res.email);
@@ -52,7 +52,7 @@ export default function EditNhacungcap() {
   }, []);
 
   const editInfo = async (name, email, diachi, sdt, ngayhoptac) => {
-    const res = await nhacungcapService.edit(id, name, parseInt(sdt), email, diachi, formatDate(ngayhoptac));
+    const res = await khachhangServices.edit(id, name, parseInt(sdt), email, diachi, formatDate(ngayhoptac));
     if(res.message === 'success'){
         succesToast("Cập nhật thành công!");
     }
@@ -69,14 +69,14 @@ export default function EditNhacungcap() {
   return (
     <div className="flex w-full min-h-screen bg-gray-800 gap-y-4">
       <ToastContainer />
-      <Sidebar active={3} />
+      <Sidebar active={4} />
       <div className="flex flex-col flex-1 gap-6 p-4">
-        <HeaderDashboard title="Nhà cung cấp" />
+        <HeaderDashboard title="Khách hàng" />
         <hr className="border-gray-700" />
         <div className="p-6 bg-gray-900 rounded-lg w-1/2">
           <div className="flex justify-between items-center pb-4 w-full">
             <h2 className="text-xl font-semibold leading-loose text-white">
-              Sửa Thông Tin Nhà Cung Cấp
+              Sửa Thông Tin Khách Hàng
             </h2>
           </div>
           <form className="mt-4 flex flex-col" onSubmit={handleForm}>
