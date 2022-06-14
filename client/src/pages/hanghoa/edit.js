@@ -18,16 +18,13 @@ export default function EditHanghoa() {
     const [gianhap, setGianhap] = useState(0);
     const [giabanle, setGiabanle] = useState(0);
     const [giabansi, setGiabansi] = useState(0);
-    const [idDVT, setIdDVT] = useState(0);
-    const [idNCC, setIdNCC] = useState(0);
-    const [idDM, setIdDM] = useState(0);
     const [optionsDVT, setOptionsDVT] = useState([]);
     const [optionsNCC, setOptionsNCC] = useState([]);
     const [optionsDM, setOptionsDM] = useState([]);
 
-    const [oldDVT, setOldDVT] = useState({});
-    const [oldNCC, setOldNCC] = useState({});
-    const [oldDM, setOldDM] = useState({});
+    const [donvitinh, setDonvitinh] = useState({});
+    const [nhacungcap, setNhacungcap] = useState({});
+    const [danhmuc, setDanhmuc] = useState({});
 
     let { id } = useParams();
 
@@ -39,8 +36,6 @@ export default function EditHanghoa() {
                 value: e.id,
                 label: e.name
             });
-
-            if(e.id === idDVT) setOldDVT({ value: e.id, label: e.name });
         });
         setOptionsDVT(options);
     };
@@ -53,7 +48,6 @@ export default function EditHanghoa() {
                 value: e.id,
                 label: e.name
             });
-            if(e.id === idNCC) setOldNCC({ value: e.id, label: e.name });
         });
         setOptionsNCC(options);
     };
@@ -66,7 +60,6 @@ export default function EditHanghoa() {
                 value: e.id,
                 label: e.name
             });
-            if(e.id === idDM) setOldDM({ value: e.id, label: e.name });
         });
         setOptionsDM(options);
     };
@@ -77,9 +70,10 @@ export default function EditHanghoa() {
         setGianhap(res.gianhap);
         setGiabanle(res.giabanle);
         setGiabansi(res.giabansi);
-        setIdDVT(res.idDVT);
-        setIdNCC(res.idNCC);
-        setIdDM(res.idDM);
+        setDonvitinh({ value:res.idDVT, label: res.name_dvt });
+        setNhacungcap({ value:res.idNCC, label: res.name_ncc });
+        setDanhmuc({ value:res.idDM, label: res.name_dm });
+        console.log(1);
     }
 
     useEffect(() => {
@@ -90,10 +84,10 @@ export default function EditHanghoa() {
     }, []);
 
 
-    const addNew = async (name, gianhap, giabansi, giabanle, idDVT, idNCC, idDM) => {
-        const res = await hanghoaServices.create(name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM);
+    const editObject = async (id, name, gianhap, giabansi, giabanle, idDVT, idNCC, idDM) => {
+        const res = await hanghoaServices.edit(id, name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM);
         if(res.message === 'success'){
-            succesToast("Thêm hàng hóa thành công!");
+            succesToast("Sửa hàng hóa thành công!");
         }
     }
 
@@ -102,7 +96,8 @@ export default function EditHanghoa() {
     if(!name){
         errorToast("Chưa nhập tên hàng hóa");
     }else{
-        addNew(name, gianhap, giabansi, giabanle, idDVT, idNCC, idDM);
+        editObject(id, name, gianhap, giabansi, giabanle, donvitinh.value, nhacungcap.value, danhmuc.value);
+        // console.log(name, gianhap, giabansi, giabanle, donvitinh.value, nhacungcap.value, danhmuc.value);
     }
   };
 
@@ -133,7 +128,8 @@ export default function EditHanghoa() {
                 className="my-4 outline-none w-64 py-3 px-2 rounded-lg text-gray-800 bg-gray-100"
                 type="number"
                 onChange={(e) => setGianhap(e.target.value)}
-                value={gianhap}
+                defaultValue={gianhap}
+                key={`${Math.floor((Math.random() * 1000))}-min`}
               />
 
               <p className="text-white">Giá bán lẻ (k):</p>
@@ -156,24 +152,24 @@ export default function EditHanghoa() {
               <p className="text-white">Đơn vị tính :</p>
               <Select
                 options={optionsDVT}
-                value={oldDVT}
-                onChange={(e) => setIdDVT(e.value)}
+                value={donvitinh}
+                onChange={(e) => setDonvitinh(e)}
                 className="my-4 outline-none w-64 rounded-lg"
               />
 
               <p className="text-white">Nhà cung cấp :</p>
               <Select
                 options={optionsNCC}
-                onChange={(e) => setIdNCC(e.value)}
-                defaultValue={oldNCC}
+                onChange={(e) => setNhacungcap(e)}
+                value={nhacungcap}
                 className="my-4 outline-none w-64 rounded-lg"
               />
 
               <p className="text-white">Danh mục :</p>
               <Select
                 options={optionsDM}
-                defaultValue={oldDM}
-                onChange={(e) => setIdDM(e.value)}
+                value={danhmuc}
+                onChange={(e) => setDanhmuc(e)}
                 className="my-4 outline-none w-64 rounded-lg"
               />
 

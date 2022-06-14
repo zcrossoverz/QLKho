@@ -55,9 +55,17 @@ exports.list = (req, res, next) => {
     });
 };
 
+// list hàng hóa theo ncc
+exports.listByNCC = (req, res, next) => {
+    pool.execute(`SELECT hanghoa.id id, hanghoa.name name, donvitinh.name name_dvt, hanghoa.giabanle giabanle, hanghoa.giabansi giabansi, hanghoa.gianhap gianhap, nhacungcap.name name_ncc, danhmuc.name name_dm FROM hanghoa LEFT JOIN donvitinh ON hanghoa.idDVT=donvitinh.id LEFT JOIN danhmuc ON hanghoa.idDM=danhmuc.id LEFT JOIN nhacungcap ON hanghoa.idNCC=nhacungcap.id WHERE nhacungcap.id=${req.params.id}`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Lỗi khi lấy dữ liệu trong database"));
+        res.send(rows);
+    });
+};
+
 // lấy ra thông tin hàng hóa
 exports.findOne = (req, res, next) => {
-    pool.execute(`SELECT * FROM hanghoa where id=${req.params.id}`, (err, rows) => {
+    pool.execute(`SELECT a.id, a.name, a.gianhap, a.giabanle, a.giabansi, a.idNCC, b.name name_dvt, a.idDVT, c.name name_ncc, a.idDM, d.name name_dm from hanghoa a, donvitinh b, nhacungcap c, danhmuc d WHERE a.idDVT=b.id AND a.idNCC = c.id AND a.idDM=d.id AND a.id=${req.params.id}`, (err, rows) => {
         if(err) return next(new BadRequestError(500, "Lỗi khi lấy dữ liệu"));
         res.send(rows[0]);
     });

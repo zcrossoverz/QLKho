@@ -2,7 +2,6 @@ import Login from "../pages/login";
 import Dashboard from "../pages/dashboard";
 import Donvitinh from "../pages/donvitinh";
 import Danhmuc from "../pages/danhmuc";
-import Donhang from "../pages/donhang";
 import Hanghoa from "../pages/hanghoa";
 import Khachhang from "../pages/khachhang";
 import Nhacungcap from "../pages/nhacungcap";
@@ -15,6 +14,8 @@ import ThemKhachhang from "../pages/khachhang/them";
 import EditKhachhang from "../pages/khachhang/edit";
 import ThemHanghoa from "../pages/hanghoa/them";
 import EditHanghoa from "../pages/hanghoa/edit";
+import Khohang from "../pages/khohang";
+import ThemDonnhap from "../pages/khohang/themdonnhap";
 
 
 
@@ -25,7 +26,8 @@ const publicRoutes = [
     { path:"/donvitinh/edit/:id", component: EditDonvitinh },
     { path:"/danhmuc", component: Danhmuc },
     { path:"/danhmuc/edit/:id", component: EditDanhmuc },
-    { path:"/donhang", component: Donhang },
+    { path:"/khohang", component: Khohang },
+    { path:"/khohang/donnhap/them", component: ThemDonnhap },
     { path:"/hanghoa", component: Hanghoa },
     { path:"/hanghoa/them", component: ThemHanghoa },
     { path:"/hanghoa/edit/:id", component: EditHanghoa },

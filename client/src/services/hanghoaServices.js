@@ -19,6 +19,15 @@ export const list = async () => {
     }
 };
 
+export const listByNCC = async (id) => {
+    try {
+        const res = await request.get(`/object/nhacungcap/${id}`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const deleteObject = async (id) => {
     try {
         const res = await request._delete(`/object/${id}`);

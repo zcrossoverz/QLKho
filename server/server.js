@@ -9,6 +9,7 @@ const setupUnitRoutes = require("./app/routes/unit.route");
 const setupCategoryRoutes = require("./app/routes/category.route");
 const setupProviderRoutes = require("./app/routes/provider.route");
 const setupCustomerRoutes = require("./app/routes/customer.route");
+const setupWarehouseRoutes = require("./app/routes/warehouse.route");
 
 app.use(cors()); 
 
@@ -20,9 +21,10 @@ setupObjectRoutes(app);
 setupCategoryRoutes(app);
 setupProviderRoutes(app);
 setupCustomerRoutes(app);
+setupWarehouseRoutes(app);
 
 app.get("/", (req, res) => {
-    res.send({ message: "hello world"});
+    res.send({ message: "welcome to project ql kho hang"});
 });
 
 const PORT = config.app.port;
