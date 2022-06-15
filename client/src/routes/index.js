@@ -16,6 +16,8 @@ import ThemHanghoa from "../pages/hanghoa/them";
 import EditHanghoa from "../pages/hanghoa/edit";
 import Khohang from "../pages/khohang";
 import ThemDonnhap from "../pages/khohang/themdonnhap";
+import ThemDonxuat from "../pages/khohang/themdonxuat";
+import ChitietDon from "../pages/khohang/chitiet";
 
 
 
@@ -27,7 +29,9 @@ const publicRoutes = [
     { path:"/danhmuc", component: Danhmuc },
     { path:"/danhmuc/edit/:id", component: EditDanhmuc },
     { path:"/khohang", component: Khohang },
+    { path:"/khohang/don/:id", component: ChitietDon },
     { path:"/khohang/donnhap/them", component: ThemDonnhap },
+    { path:"/khohang/donxuat/them", component: ThemDonxuat },
     { path:"/hanghoa", component: Hanghoa },
     { path:"/hanghoa/them", component: ThemHanghoa },
     { path:"/hanghoa/edit/:id", component: EditHanghoa },

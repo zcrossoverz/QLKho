@@ -18,9 +18,14 @@ exports.taoDonHang = async (req, res, next) => {
             pool.execute(`INSERT INTO chitietdonhang (idHH, idDH, soluong, gia) VALUES (${e.idHH}, ${idDH}, ${e.soluong}, ${e.gia})`, (err) => {
                 if(err) return next(new BadRequestError(500, "Lỗi khi thêm chi tiết đơn hàng"));
             });
+            if(type === 1) {
+                pool.execute(`INSERT INTO kho (idHH, tonkho) SELECT * FROM (SELECT ${e.idHH},0) AS tmp WHERE NOT EXISTS (SELECT idHH FROM kho WHERE idHH=${e.idHH}) LIMIT 1`);
+                pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+            }
         });
         res.send({message:"success"});
     });
+
 
 };
 
@@ -34,7 +39,7 @@ exports.getList = async (req, res, next) => {
 
 // get list don xuat
 exports.getListXuat = async (req, res, next) => {
-    pool.execute("SELECT * FROM donhang WHERE type=2", (err, rows) => {
+    pool.execute("SELECT * FROM donhang WHERE type=2 ORDER BY id DESC", (err, rows) => {
         if(err) return next(new BadRequestError(500, "Error"));
         res.send(rows);
     });
@@ -42,7 +47,7 @@ exports.getListXuat = async (req, res, next) => {
 
 // get list don nhap
 exports.getListNhap = async (req, res, next) => {
-    pool.execute("SELECT * FROM donhang WHERE type=1", (err, rows) => {
+    pool.execute("SELECT * FROM donhang WHERE type=1 ORDER BY id DESC", (err, rows) => {
         if(err) return next(new BadRequestError(500, "Error"));
         res.send(rows);
     });
@@ -73,4 +78,45 @@ exports.delete = async (req, res, next) => {
         if(err) return next(new BadRequestError(500, "Error"));
     });
     res.send({message:"success"});
+};
+
+// lay ra list ton kho
+exports.getTonKho = async (req, res, next) => {
+    pool.execute(`SELECT * FROM kho WHERE tonkho>0`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
+
+exports.getDonChuaThanhToan = async (req, res, next) => {
+    pool.execute('SELECT * FROM donhang WHERE status = 2', (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
+
+
+exports.getInfoDon = async (req, res, next) => {
+    pool.execute(`SELECT * FROM donhang WHERE id=${req.params.id}`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+}
+
+exports.getDataDon = async (req, res, next) => {
+    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.name FROM chitietdonhang a, hanghoa b WHERE idDH=${req.params.id} AND a.idHH=b.id`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
+
+exports.thanhtoan = async (req, res, next) => {
+    // pool.execute(`SELECT * FROM chitietdonhang WHERE idDH=${req.params.id}`, (err)=> {
+    //     if(err) return next(new BadRequestError(500, "Error"));
+    //     res.send({ message: 'success'});
+    // });
+    pool.execute(`UPDATE donhang SET status = 1 WHERE id=${req.params.id}`, (err)=> {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send({ message: 'success'});
+    });
 }

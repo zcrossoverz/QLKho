@@ -8,6 +8,11 @@ module.exports = (app) => {
     router.get("/", warehouse.getList);
     router.get("/donnhap", warehouse.getListNhap);
     router.get("/donxuat", warehouse.getListXuat);
+    router.get("/tonkho", warehouse.getTonKho);
+    router.get("/chuatt", warehouse.getDonChuaThanhToan);
+    router.get("/don/:id", warehouse.getInfoDon);
+    router.get("/datadon/:id", warehouse.getDataDon);
+    router.get("/thanhtoan/:id", warehouse.thanhtoan);
     router.get("/:id", warehouse.getOne);
     router.get("/chitiet/:id", warehouse.detail);
     router.delete("/:id", warehouse.delete);

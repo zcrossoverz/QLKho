@@ -4,7 +4,7 @@ import Sidebar from "../../components/dashboard/sidebar";
 import HeaderDashboard from "../../components/header";
 import Stats from "../../components/khohang/stats";
 import * as khohangServices from "../../services/khohangServices";
-import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
+import { DocumentTextIcon, PencilIcon, TrashIcon } from "@heroicons/react/outline";
 import { succesToast } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
 
@@ -14,10 +14,10 @@ export default function Khohang() {
   const [listdonnhap, setListdonnhap] = useState([]);
   const [listdonxuat, setListdonxuat] = useState([]);
 
+
   const getListNhap = async () => {
     const res = await khohangServices.listNhap();
     setListdonnhap(res);
-    console.log(res);
   };
 
   const getListXuat = async () => {
@@ -43,15 +43,15 @@ export default function Khohang() {
     return (
       <tr>
         <td className="text-white">DH{props.id}</td>
-        <td className="text-white">{props.status}</td>
+        <td className="text-white">{props.status===1? <p className="text-green-400">đã thanh toán</p>:<p className="text-red-400">chưa thanh toán</p>}</td>
         <td className="text-white">{props.note}</td>
         <td className="text-white">{props.time}</td>
         <td className="text-white flex items-center m-2">
           <button className="hover:text-green-600 p-4">
-            <PencilIcon
+            <DocumentTextIcon
               className="h-5"
               onClick={() => {
-                navigate(`/donvitinh/edit/${props.id}`, { replace: true });
+                navigate(`/khohang/don/${props.id}`, { replace: false });
               }}
             />
           </button>

@@ -11,7 +11,7 @@ import * as khohangServices from "../../services/khohangServices";
 import Select from "react-select";
 import { TrashIcon } from "@heroicons/react/outline";
 
-export default function ThemDonnhap() {
+export default function ThemDonxuat() {
  
 
   const [nhacungcapOptions, setNhacungcapOptions] = useState([]);
@@ -161,11 +161,11 @@ export default function ThemDonnhap() {
           <div className="p-6 bg-gray-900 rounded-lg w-1/2 mr-4">
             <div className="flex justify-between items-center pb-4 w-full">
               <h2 className="text-xl font-semibold leading-loose text-white">
-                Thêm Đơn Nhập Hàng
+                Thêm Đơn Xuất Hàng
               </h2>
             </div>
             <form className="mt-4 flex flex-col" onSubmit={handleForm}>
-              <p className="text-white">Nhà cung cấp :</p>
+              <p className="text-white">Khách hàng :</p>
               <Select
                 className="my-2"
                 options={nhacungcapOptions}
