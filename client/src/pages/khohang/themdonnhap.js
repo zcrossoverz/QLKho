@@ -10,6 +10,7 @@ import * as donvitinhServices from "../../services/donvitinhServices";
 import * as khohangServices from "../../services/khohangServices";
 import Select from "react-select";
 import { TrashIcon } from "@heroicons/react/outline";
+import currentcyFormat from "../../utils/currentcy";
 
 export default function ThemDonnhap() {
  
@@ -135,7 +136,7 @@ export default function ThemDonnhap() {
             <td>{props.stt}</td>
             <td>{props.name}</td>
             <td>{props.num}</td>
-            <td>{props.total}</td>
+            <td>{currentcyFormat(props.total)}</td>
             <td>
               <button className="hover:text-red-600 p-4">
               <TrashIcon
@@ -282,7 +283,7 @@ export default function ThemDonnhap() {
                           </td>
                           <td className="text-white font-semibold leading-loose">
                             Tổng: { 
-                            totalPrice
+                            currentcyFormat(totalPrice)
                             }
                           
                           </td>

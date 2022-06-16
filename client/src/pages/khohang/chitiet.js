@@ -8,6 +8,7 @@ import * as khachhangServices from "../../services/khachhangServices";
 
 import { useParams } from "react-router-dom";
 import { errorToast, succesToast } from "../../utils/toast";
+import currentcyFormat from "../../utils/currentcy";
 
 export default function ChitietDon() {
   let { id } = useParams();
@@ -24,8 +25,8 @@ export default function ChitietDon() {
     let d = [];
     let am = 0;
     res.data.map((e) => {
-        d.push({ id:e.idHH, num: e.soluong, total: e.gia, name:e.name });
-        am+=e.gia;
+      d.push({ id: e.idHH, num: e.soluong, total: e.gia, name: e.name });
+      am += e.gia;
     });
     setData(d);
     setAmount(am);
@@ -34,35 +35,36 @@ export default function ChitietDon() {
       const n = await nhacungcapServices.getOne(res.info[0].id2);
       setName2(n.name);
     } else {
-      const n = await khachhangServices.getOne(res.info[0].id2);
-      setName2(n.name);
+      if (res.info[0].id2) {
+        const n = await khachhangServices.getOne(res.info[0].id2);
+        setName2(n.name);
+      } else {
+        setName2("Khách bán lẻ");
+      }
     }
-    console.log(res);
+    // console.log(res);
   };
 
-  
-
-  useEffect( () => {
-     fetchDon();
+  useEffect(() => {
+    fetchDon();
   }, []);
-
 
   const thanhtoan = async () => {
     const res = await khohangService.thanhtoan(chitiet.id);
-    if(res.message === 'success'){
-        succesToast('Đã thanh toán!');
-    }else{
-        errorToast('Thanh toán thất bại!');
+    if (res.message === "success") {
+      succesToast("Đã thanh toán!");
+    } else {
+      errorToast("Thanh toán thất bại!");
     }
-  }
+  };
 
   let Item = (props) => {
     return (
       <tr className="text-white">
-        <td className="pt-4">{props.stt+1}</td>
+        <td className="pt-4">{props.stt + 1}</td>
         <td className="pt-4">{props.name}</td>
         <td className="pt-4">{props.num}</td>
-        <td className="pt-4">{props.total}</td>
+        <td className="pt-4">{currentcyFormat(props.total)}</td>
       </tr>
     );
   };
@@ -118,21 +120,22 @@ export default function ChitietDon() {
                 <span className="font-normal">{time.toLocaleDateString()}</span>
               </p>
               {chitiet.status === 2 ? (
-                <button className="bg-violet-600 py-2 px-4 w-52 rounded-lg mt-4"
-                onClick={thanhtoan}
+                <button
+                  className="bg-violet-600 py-2 px-4 w-52 rounded-lg mt-4"
+                  onClick={thanhtoan}
                 >
                   Đánh dấu thanh toán
                 </button>
               ) : (
-                ''
+                ""
               )}
             </div>
           </div>
         </div>
 
         <div className="w-full bg-gray-900 px-4 py-6 rounded-lg">
-            <h2 className="text-white text-xl font-semibold">Thông Tin</h2>
-            <hr className="bg-gray-400 mt-4"/>
+          <h2 className="text-white text-xl font-semibold">Thông Tin</h2>
+          <hr className="bg-gray-400 mt-4" />
           <table className="text-white w-full">
             <thead className="pb-4">
               <tr className="leading-loose font-semibold">
@@ -156,7 +159,9 @@ export default function ChitietDon() {
                 <td></td>
                 <td></td>
                 <td></td>
-                <td className="pt-4 leading-loose font-semibold">Tổng: {amount}</td>
+                <td className="pt-4 leading-loose font-semibold">
+                  Tổng: {currentcyFormat(amount)}
+                </td>
               </tr>
             </tbody>
           </table>

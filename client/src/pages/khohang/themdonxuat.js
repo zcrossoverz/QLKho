@@ -4,22 +4,25 @@ import Sidebar from "../../components/dashboard/sidebar";
 import HeaderDashboard from "../../components/header";
 import "react-datepicker/dist/react-datepicker.css";
 import { errorToast, succesToast } from "../../utils/toast";
-import * as nhacungcapServices from "../../services/nhacungcapServices";
+import * as khachhangServices from "../../services/khachhangServices";
 import * as hanghoaServices from "../../services/hanghoaServices";
 import * as donvitinhServices from "../../services/donvitinhServices";
 import * as khohangServices from "../../services/khohangServices";
 import Select from "react-select";
 import { TrashIcon } from "@heroicons/react/outline";
+import currentcyFormat from "../../utils/currentcy";
 
 export default function ThemDonxuat() {
  
 
   const [nhacungcapOptions, setNhacungcapOptions] = useState([]);
   const [hanghoaOptions, setHanghoaOptions] = useState([]);
+  const [tonkho, setTonkho] = useState([]);
+  const [max, setMax] = useState(0);
 
   const [selectNCC, setSelectNCC] = useState(0);
   const [selectHH, setSelectHH] = useState({ value:0, label:'' });
-  const [dongia, setDongia] = useState(0);
+  const [gia, setgia] = useState(0);
   const [num, setNum] = useState(0);
   const [dvt, setdvt] = useState('');
   const [totalPrice, setTotalPrice] = useState(0);
@@ -29,11 +32,12 @@ export default function ThemDonxuat() {
   const [listSP, setListSP] = useState([]);
 
   const fetchNCC = async () => {
-    const res = await nhacungcapServices.list();
+    const res = await khachhangServices.list();
     let ncc = [];
     res.map((e) => {
         ncc.push({ value: e.id, label: e.name });
-    })
+    });
+    ncc.push({ value:0, label:'Bán lẻ cho khách' });
     setNhacungcapOptions(ncc);
   };
 
@@ -47,26 +51,35 @@ export default function ThemDonxuat() {
   };
 
   const fetchHH = async () => {
-    const res = await hanghoaServices.listByNCC(selectNCC);
+    const res = await khohangServices.listSPKho();
     let hh = [];
     res.map((e) => {
-        hh.push({ value: e.id, label: e.name });
+        hh.push({ value: e.idHH, label: e.name });
     });
+    setTonkho(res);
     setHanghoaOptions(hh);
+    setgia(0);
   };
 
   const fetchInfoHH = async () => {
     const res = await hanghoaServices.getOne(selectHH.value);
-    setDongia(res.gianhap);
+    if(selectNCC==0) setgia(res.giabanle);
+    else setgia(res.giabansi);
     if(res.idDVT!==undefined){
       const res2 = await donvitinhServices.getOne(res.idDVT);
       setdvt(res2.name);
     }
+
+    tonkho.forEach((e) => {
+      if(e.idHH === selectHH.value){
+        setMax(e.tonkho);
+      }
+    });
   };
 
   const addToListSP = () => {
-    setTotalPrice(totalPrice+(num*dongia));
-    setListSP((e) => [...e, { name: selectHH.label, num, total: num*dongia, id:selectHH.value }]);
+    setTotalPrice(totalPrice+(num*gia));
+    setListSP((e) => [...e, { name: selectHH.label, num, total: num*gia, id:selectHH.value }]);
   };
 
 
@@ -79,6 +92,7 @@ export default function ThemDonxuat() {
     setSelectHH({ value:0, label:'' });
     setListSP([]);
     setTotalPrice(0);
+    setMax(0);
   }, [selectNCC]);
 
   useEffect(() => {
@@ -94,7 +108,7 @@ export default function ThemDonxuat() {
         gia: e.total
       })
     });
-    const res = await khohangServices.taoDonHang(1, status, note, selectNCC, info);
+    const res = await khohangServices.taoDonHang(2, status, note, selectNCC, info);
     if(res.message === 'success') {
       succesToast('Thêm thành công!');
       setStatus(0);
@@ -135,7 +149,7 @@ export default function ThemDonxuat() {
             <td>{props.stt}</td>
             <td>{props.name}</td>
             <td>{props.num}</td>
-            <td>{props.total}</td>
+            <td>{currentcyFormat(props.total)}</td>
             <td>
               <button className="hover:text-red-600 p-4">
               <TrashIcon
@@ -186,14 +200,14 @@ export default function ThemDonxuat() {
 
               <button
                 type="submit"
-                disabled={!status || !selectNCC}
+                disabled={!status}
                 className={
-                  !status || !selectNCC
+                  !status
                     ? "my-2 w-50 bg-gray-700 px-10 py-2 rounded-lg text-gray-100 leading-loose"
                     : "my-2 w-50 bg-pink-800 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-500 hover:shadow-pink leading-loose"
                 }
               >
-                Tạo đơn nhập
+                Tạo đơn xuất
               </button>
             </form>
           </div>
@@ -212,7 +226,7 @@ export default function ThemDonxuat() {
                 value={selectHH}
                 onChange={(e) => setSelectHH(e)}
               />
-            <p className="text-white">Số lượng { !dvt ? '':`(${dvt})`}:</p>
+            <p className="text-white">Số lượng { !dvt ? '':`(${dvt})`} { max<=0 ? '':`(trong kho: ${max})` }:</p>
             <input
                 className="my-2 outline-none w-50 py-2 px-2 rounded-lg text-gray-800 bg-gray-100"
                 type="number"
@@ -224,8 +238,10 @@ export default function ThemDonxuat() {
             <input
                 className="my-2 mb-4 outline-none w-50 py-2 px-2 rounded-lg text-gray-800 bg-gray-100"
                 type="number"
-                value={dongia}
-                onChange={(e) => setDongia(e.target.value)}
+                value={
+                  gia
+                }
+                onChange={(e) => setgia(e.target.value)}
               />
             <button
                 disabled={hanghoaOptions.length<=0}
@@ -282,7 +298,7 @@ export default function ThemDonxuat() {
                           </td>
                           <td className="text-white font-semibold leading-loose">
                             Tổng: { 
-                            totalPrice
+                            currentcyFormat(totalPrice)
                             }
                           
                           </td>

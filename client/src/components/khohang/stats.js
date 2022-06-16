@@ -51,7 +51,6 @@ export default function Stats() {
     <div className='flex gap-6'>
         <StatsCard value={loai} title="Số sản phẩm tồn kho" />
         <StatsCard value={ton} title="Số lượng tồn kho" />
-        <StatsCard value={daban} title="Tổng số sản phẩm đã bán" />
         <StatsCard value={chuatt} title="Tổng số đơn chưa thanh toán" />
     </div>
   )

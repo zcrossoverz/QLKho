@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ArchiveIcon, HomeIcon, OfficeBuildingIcon, IdentificationIcon, CurrencyDollarIcon, TruckIcon, FilterIcon, PlusCircleIcon, AdjustmentsIcon } from '@heroicons/react/outline'
+import { ArchiveIcon, HomeIcon, OfficeBuildingIcon, IdentificationIcon, CurrencyDollarIcon, TruckIcon, FilterIcon, PlusCircleIcon, AdjustmentsIcon, PresentationChartLineIcon } from '@heroicons/react/outline'
 import { useNavigate } from 'react-router-dom';
 
 export default function Sidebar(props) {
@@ -16,7 +16,7 @@ export default function Sidebar(props) {
         { icon: IdentificationIcon, path:"/khachhang" },
         { icon: FilterIcon, path:"/danhmuc" },
         { icon: ArchiveIcon, path:"/khohang" },
-        { icon: AdjustmentsIcon, path:"/taikhoan" },
+        { icon: PresentationChartLineIcon, path:"/baocao" },
     ];
 
     let Button = (props) => {

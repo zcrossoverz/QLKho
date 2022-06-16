@@ -28,6 +28,7 @@ export const listByNCC = async (id) => {
     }
 };
 
+
 export const deleteObject = async (id) => {
     try {
         const res = await request._delete(`/object/${id}`);

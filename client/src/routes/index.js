@@ -18,6 +18,7 @@ import Khohang from "../pages/khohang";
 import ThemDonnhap from "../pages/khohang/themdonnhap";
 import ThemDonxuat from "../pages/khohang/themdonxuat";
 import ChitietDon from "../pages/khohang/chitiet";
+import Baocao from "../pages/baocao";
 
 
 
@@ -42,6 +43,7 @@ const publicRoutes = [
     { path:"/nhacungcap/them", component: ThemNhacungcap },
     { path:"/nhacungcap/edit/:id", component: EditNhacungcap },
     { path:"/taikhoan", component: Taikhoan },
+    { path:"/baocao", component: Baocao },
 ];
 
 const privateRoutes = [

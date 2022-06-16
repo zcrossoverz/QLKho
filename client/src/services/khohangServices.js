@@ -64,11 +64,10 @@ export const getInfoDon = async(id) => {
             info: res,
             data
         }
-        return res;
     } catch (error) {
         throw error;
     }
-}
+};
 
 
 export const thanhtoan = async(id) => {
@@ -78,6 +77,17 @@ export const thanhtoan = async(id) => {
     } catch (error) {
         throw error;
     }
-}
+};
+
+export const listSPKho = async (options = 0) => {
+    try {
+        let res;
+        if(options === 0) res = await request.get(`/warehouse/sptonkho`);
+        else res = await request.get(`/warehouse/sptonkho/${options}`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
 
 
