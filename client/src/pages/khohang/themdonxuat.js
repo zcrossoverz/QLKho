@@ -200,9 +200,9 @@ export default function ThemDonxuat() {
 
               <button
                 type="submit"
-                disabled={!status}
+                disabled={!status || !note}
                 className={
-                  !status
+                  !status || !note
                     ? "my-2 w-50 bg-gray-700 px-10 py-2 rounded-lg text-gray-100 leading-loose"
                     : "my-2 w-50 bg-pink-800 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-500 hover:shadow-pink leading-loose"
                 }

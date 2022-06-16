@@ -11,6 +11,10 @@ module.exports = (app) => {
     router.get("/tonkho", warehouse.getTonKho);
     router.get("/sptonkho", warehouse.getSPTonKho);
     router.get("/sptonkho/:type", warehouse.getSPTonKho2);
+    router.get("/danhmuc", warehouse.listByDM);
+    router.get("/nhacungcap", warehouse.listByNCC);
+    router.get("/doanhso", warehouse.doanhso);
+    router.get("/baocaods", warehouse.baoCaoDoanhso);
     router.get("/chuatt", warehouse.getDonChuaThanhToan);
     router.get("/don/:id", warehouse.getInfoDon);
     router.get("/datadon/:id", warehouse.getDataDon);

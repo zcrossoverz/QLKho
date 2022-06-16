@@ -28,6 +28,15 @@ export const listXuat = async () => {
     }
 };
 
+export const listFull = async () => {
+    try {
+        const res = await request.get('/warehouse/');
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const _delete = async(id) => {
     try {
         const res = await request._delete(`/warehouse/${id}`);
@@ -73,6 +82,42 @@ export const getInfoDon = async(id) => {
 export const thanhtoan = async(id) => {
     try {
         const res = await request.get(`/warehouse/thanhtoan/${id}`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const listByDM = async () => {
+    try {
+        const res = await request.get(`/warehouse/danhmuc`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const listByNCC = async () => {
+    try {
+        const res = await request.get(`/warehouse/nhacungcap`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const doanhso = async () => {
+    try {
+        const res = await request.get(`/warehouse/doanhso`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const bcdoanhso = async () => {
+    try {
+        const res = await request.get(`/warehouse/baocaods`);
         return res;
     } catch (error) {
         throw error;

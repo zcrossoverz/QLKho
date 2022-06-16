@@ -7,7 +7,7 @@ const config = {
         user: 'root',
         password: '',
         database: 'qlkho_db',
-        connectionLimit: 10,
+        connectionLimit: 30,
         multipleStatements: true
     }
 };

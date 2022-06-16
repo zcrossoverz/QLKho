@@ -1,8 +1,19 @@
-import React from 'react'
-
+import React, { useEffect, useState } from 'react'
+import { doanhso } from '../../services/khohangServices';
+import currentcyFormat from '../../utils/currentcy';
 export default function Stats() {
 
-    
+    const [data, setData] = useState({});
+
+    const fetch = async () => {
+        const res = await doanhso();
+        setData(res[0]);
+        // console.log(res);
+    };
+
+    useEffect(() => {
+        fetch();
+    },[]);
 
  
     let StatsCard = (props) => {
@@ -21,10 +32,9 @@ export default function Stats() {
 
   return (
     <div className='flex gap-6'>
-        <StatsCard value="100000" title="Số lượng sản phẩm đang bán" />
-        <StatsCard value="200000" title="Tổng vốn đầu tư" />
-        <StatsCard value="100000" title="Doanh số bán hàng" />
-        <StatsCard value="39999" title="Lợi nhuận thu về" />
+        <StatsCard value={data.sl_sp} title="Số lượng sản phẩm trong kho" />
+        <StatsCard value={currentcyFormat(data.von)} title="Tổng vốn đầu tư" />
+        <StatsCard value={currentcyFormat(data.ban)} title="Doanh số bán hàng" />
     </div>
   )
 }

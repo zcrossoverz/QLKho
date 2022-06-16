@@ -3,31 +3,84 @@ import Sidebar from "../../components/dashboard/sidebar";
 import HeaderDashboard from "../../components/header";
 import Select from "react-select";
 import * as khohangService from "../../services/khohangServices";
+import currentcyFormat from "../../utils/currentcy";
 
 export default function Baocao() {
   const [tonkho, setTonkho] = useState([]);
   const [filter, setFilter] = useState(0);
+  const [listDM, setListDM] = useState([]);
+  const [listNCC, setListNCC] = useState([]);
+  const [sumTonkho, setsumTonkho] = useState(0);
+  const [sumAmount, setsumAmount] = useState(0);
+  const [ds, setDs] = useState([]);
   const fetchKho = async () => {
     const res = await khohangService.listSPKho();
-    console.log(res);
     setTonkho(res);
   };
 
-  const fetchKho2 = async (type) => {
-    const res = await khohangService.listSPKho(type);
-    console.log("change");
-    setTonkho(res);
+  // const fetchKho2 = async (type) => {
+  //   const res = await khohangService.listSPKho(type);
+  //   console.log("change");
+  //   setTonkho(res);
+  // };
+
+  const fetchDS = async () => {
+    const res = await khohangService.bcdoanhso();
+    console.log(res);
+    setDs(res);
+  }
+
+  const fetchDM = async () => {
+    const res = await khohangService.listByDM();
+    setListDM(res);
+    // console.log(1,res);
+  };
+  
+  const fetchNCC = async () => {
+    const res = await khohangService.listByNCC();
+    setListNCC(res);
+    // console.log(1,res);
   };
 
   useEffect(() => {
     fetchKho();
+    fetchDM();
+    fetchNCC();
+    fetchDS();
   }, []);
 
   useEffect(() => {
-    switch(filter){
-        case 0: fetchKho();
-        case 4: fetchKho2(1);
-        case 5: fetchKho2(2);
+    if(filter === 0) {
+      let ton = 0;
+      let amount = 0;
+      tonkho.forEach(e => {
+        ton += parseInt(e.tonkho);
+        amount += parseInt(e.daban);
+      });
+      setsumTonkho(ton);
+      setsumAmount(amount);
+    }
+
+    if(filter === 1) {
+      let ton = 0;
+      let amount = 0;
+      listNCC.forEach(e => {
+        ton += parseInt(e.sl_tonkho);
+        amount += parseInt(e.daban);
+      });
+      setsumTonkho(ton);
+      setsumAmount(amount);
+    }
+
+    if(filter === 2) {
+      let ton = 0;
+      let amount = 0;
+      listDM.forEach(e => {
+        ton += parseInt(e.sl_tonkho);
+        amount += parseInt(e.daban);
+      });
+      setsumTonkho(ton);
+      setsumAmount(amount);
     }
   },[filter])
   let Item = (props) => {
@@ -68,19 +121,105 @@ export default function Baocao() {
                 nhacungcap={e.name_ncc}
                 tonkho={e.tonkho}
                 danhmuc={e.name_dm}
-                daban={e.daban}
+                daban={(e.daban)}
                 key={e.id}
               />
             );
           })}
+          {/* <tr className="text-white leading-loose font-semibold">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Tổng: </td>
+            <td>{sumTonkho}</td>
+            <td>{currentcyFormat(sumAmount)}</td>
+          </tr> */}
+        </tbody>
+      </table>
+    );
+  };
+
+
+  let FilterDM = () => {
+    return (
+      <table className="w-full">
+        <thead>
+          <tr className="text-gray-200 leading-loose font-semibold">
+            <td className="border-b border-gray-700">STT</td>
+            <td className="border-b border-gray-700">Tên danh mục</td>
+            <td className="border-b border-gray-700">Số sản phẩm đang bán</td>
+            <td className="border-b border-gray-700">Tồn kho</td>
+            <td className="border-b border-gray-700">Đã bán</td>
+          </tr>
+        </thead>
+        <tbody>
+          {listDM.map((e, i) => {
+            return (
+              <tr className="text-white leading-loose">
+                <td>{i+1}</td>
+                <td>{e.name}</td>
+                <td>{e.sl_sp}</td>
+                <td>{e.sl_tonkho}</td>
+                <td>{(e.daban)}</td>
+              </tr>
+            );
+          })}
+          <tr className="text-white leading-loose font-semibold">
+            <td></td>
+            <td></td>
+            <td>Tổng: </td>
+            <td>{sumTonkho}</td>
+            <td>{(sumAmount)}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+
+  let FilterNCC = () => {
+    return (
+      <table className="w-full">
+        <thead>
+          <tr className="text-gray-200 leading-loose font-semibold">
+            <td className="border-b border-gray-700">STT</td>
+            <td className="border-b border-gray-700">Tên nhà cung cấp</td>
+            <td className="border-b border-gray-700">Số sản phẩm đang bán</td>
+            <td className="border-b border-gray-700">Tồn kho</td>
+            <td className="border-b border-gray-700">Đã bán</td>
+          </tr>
+        </thead>
+        <tbody>
+          {listNCC.map((e, i) => {
+            return (
+              <tr className="text-white leading-loose">
+                <td>{i+1}</td>
+                <td>{e.name}</td>
+                <td>{e.sl_sp}</td>
+                <td>{e.sl_tonkho}</td>
+                <td>{(e.daban)}</td>
+              </tr>
+            );
+          })}
+          <tr className="text-white leading-loose font-semibold">
+            <td></td>
+            <td></td>
+            <td>Tổng: </td>
+            <td>{sumTonkho}</td>
+            <td>{(sumAmount)}</td>
+          </tr>
         </tbody>
       </table>
     );
   };
 
   const Report = () => {
-    if (filter === 0 || filter === 4 || filter === 5) {
+    if (filter === 0) {
       return <Tonkho />;
+    }else if(filter === 2){
+      return <FilterDM />;
+    }else if(filter === 1){
+      return <FilterNCC />;
     }
   };
   return (
@@ -102,25 +241,13 @@ export default function Baocao() {
                     label: "Tất cả",
                   },
                 {
-                    value: 1,
-                    label: "Theo đơn vị tính",
-                  },
-                {
-                  value: 2,
+                  value: 1,
                   label: "Theo nhà cung cấp",
                 },
                 {
-                    value: 3,
+                    value: 2,
                     label: "Theo danh mục",
-                },
-                {
-                    value: 4,
-                    label: "Theo số lượng tồn",
-                },
-                {
-                    value: 5,
-                    label: "Theo số lượng xuất kho",
-                },
+                }
               ]}
 
               onChange={e => setFilter(e.value)}
@@ -128,6 +255,41 @@ export default function Baocao() {
           </div>
           <hr className="bg-gray-300 mt-4 mb-6" />
           <Report />
+        </div>
+
+        <div className="p-6 bg-gray-900 rounded-lg">
+          <div className="flex w-full">
+            <h2 className="text-white leading-loose font-semibold text-xl">
+              Báo Cáo Doanh Số
+            </h2>
+          </div>
+          <hr className="bg-gray-300 mt-4 mb-6" />
+          <table className="w-full">
+          <thead>
+          <tr className="text-gray-200 leading-loose font-semibold">
+            <td className="border-b border-gray-700">STT</td>
+            <td className="border-b border-gray-700">ID hàng hóa</td>
+            <td className="border-b border-gray-700">Tên hàng hóa</td>
+            <td className="border-b border-gray-700">Tồn kho</td>
+            <td className="border-b border-gray-700">Tổng tiền vốn</td>
+            <td className="border-b border-gray-700">Doanh số</td>
+          </tr>
+        </thead>
+        <tbody>
+          {ds.map((e,i) => {
+            return (
+              <tr className="text-white" key={e.id}>
+              <td>{i+1}</td>
+              <td>{e.idHH}</td>
+              <td>{e.name}</td>
+              <td>{e.tonkho}</td>
+              <td>{currentcyFormat(e.tienvon)}</td>
+              <td>{currentcyFormat(e.tienban)}</td>
+            </tr>
+            )
+          })}
+        </tbody>
+          </table>
         </div>
       </div>
     </div>
