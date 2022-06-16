@@ -9,6 +9,8 @@ module.exports = (app) => {
     router.get("/donnhap", warehouse.getListNhap);
     router.get("/donxuat", warehouse.getListXuat);
     router.get("/tonkho", warehouse.getTonKho);
+    router.get("/sptonkho", warehouse.getSPTonKho);
+    router.get("/sptonkho/:type", warehouse.getSPTonKho2);
     router.get("/chuatt", warehouse.getDonChuaThanhToan);
     router.get("/don/:id", warehouse.getInfoDon);
     router.get("/datadon/:id", warehouse.getDataDon);

@@ -5,12 +5,12 @@ const { BadRequestError } = require("../helpers/errors");
 exports.taoDonHang = async (req, res, next) => {
 
     let type = req.body.type; // type = 1 = don nhap, type = 2 = don xuat
-    let status = req.body.status; // status = 1 = da thanh toan, status = 2 = chua thanh toan, = 3 = cancer order
+    let status = req.body.status; // status = 1 = da thanh toan, status = 2 = chua thanh toan
     let note = req.body.note;
     let id2 = req.body.id2; // type = 1 => id nha cung cap, type = 2 => id khach hang
     let dulieudonhang = req.body.info;
 
-    if(!type || !status || !id2) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
+    if(!type || !status || (!id2 && type==1)) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
     pool.execute(`INSERT INTO donhang (type, status, note, id2, time) VALUES (${type}, ${status}, '${note}', ${id2}, time(now()))`, (err, rows) => {
         if(err) return next(new BadRequestError(500, "Lỗi khi thêm mới"));
         let idDH = rows.insertId;
@@ -20,7 +20,9 @@ exports.taoDonHang = async (req, res, next) => {
             });
             if(type === 1) {
                 pool.execute(`INSERT INTO kho (idHH, tonkho) SELECT * FROM (SELECT ${e.idHH},0) AS tmp WHERE NOT EXISTS (SELECT idHH FROM kho WHERE idHH=${e.idHH}) LIMIT 1`);
-                pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+                if(status === 1) pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+            }else{
+                if(status === 1) pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`);
             }
         });
         res.send({message:"success"});
@@ -111,12 +113,35 @@ exports.getDataDon = async (req, res, next) => {
 };
 
 exports.thanhtoan = async (req, res, next) => {
-    // pool.execute(`SELECT * FROM chitietdonhang WHERE idDH=${req.params.id}`, (err)=> {
-    //     if(err) return next(new BadRequestError(500, "Error"));
-    //     res.send({ message: 'success'});
-    // });
+    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.type FROM chitietdonhang a, donhang b WHERE a.idDH=b.id AND a.idDH=${req.params.id}`, (err, rows)=> {
+        if(err) return next(new BadRequestError(500, "Error"));
+        rows.map(e => {
+            if(e.type===1){
+                pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+            }else{
+                pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`);
+            }
+        });
+    });
     pool.execute(`UPDATE donhang SET status = 1 WHERE id=${req.params.id}`, (err)=> {
         if(err) return next(new BadRequestError(500, "Error"));
         res.send({ message: 'success'});
     });
-}
+};
+
+exports.getSPTonKho = async (req, res, next) => {
+    pool.execute(`SELECT a.id, a.idHH, a.daban, a.tonkho, b.name, b.giabansi, b.giabanle, c.name dvt, d.name name_ncc,e.name name_dm FROM kho a, hanghoa b, donvitinh c, nhacungcap d, danhmuc e WHERE tonkho>0 AND a.idHH=b.id AND b.idDVT=c.id AND b.idNCC=d.id AND b.idDM=e.id`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
+
+exports.getSPTonKho2 = async (req, res, next) => {
+    let query = '';
+    if(req.params.type===1)  query = 'ORDER BY tonkho DESC';
+    else query = 'ORDER BY daban DESC';
+    pool.execute(`SELECT a.id, a.idHH, a.daban, a.tonkho, b.name, b.giabansi, b.giabanle, c.name dvt, d.name name_ncc,e.name name_dm FROM kho a, hanghoa b, donvitinh c, nhacungcap d, danhmuc e WHERE tonkho>0 AND a.idHH=b.id AND b.idDVT=c.id AND b.idNCC=d.id AND b.idDM=e.id ${query}`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
