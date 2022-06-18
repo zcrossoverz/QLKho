@@ -73,6 +73,8 @@ export default function ThemHanghoa() {
         const res = await hanghoaServices.create(name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM);
         if(res.message === 'success'){
             succesToast("Thêm hàng hóa thành công!");
+        }else if(res.message === 'exists'){
+          errorToast("Trùng với tên hàng hóa cũ!");
         }
     }
 

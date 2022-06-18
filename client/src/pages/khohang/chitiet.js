@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Sidebar from "../../components/dashboard/sidebar";
 import HeaderDashboard from "../../components/header";
 import { ToastContainer } from "react-toastify";
 import * as khohangService from "../../services/khohangServices";
 import * as nhacungcapServices from "../../services/nhacungcapServices";
 import * as khachhangServices from "../../services/khachhangServices";
+import { useReactToPrint } from 'react-to-print';
+import { PrintHoadon } from "./print";
 
 import { useParams } from "react-router-dom";
 import { errorToast, succesToast } from "../../utils/toast";
@@ -19,13 +21,17 @@ export default function ChitietDon() {
   const [name2, setName2] = useState("");
   const [amount, setAmount] = useState(0);
 
+
+  
+
   const fetchDon = async () => {
     const res = await khohangService.getInfoDon(id);
     setChitiet(res.info[0]);
     let d = [];
     let am = 0;
+    // console.log(res);
     res.data.map((e) => {
-      d.push({ id: e.idHH, num: e.soluong, total: e.gia, name: e.name });
+      d.push({ id: e.idHH, num: e.soluong, total: e.gia, name: e.name, dvt: e.dvt });
       am += e.gia;
     });
     setData(d);
@@ -44,6 +50,11 @@ export default function ChitietDon() {
     }
     // console.log(res);
   };
+
+  const componentRef = useRef();
+  const print = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   useEffect(() => {
     fetchDon();
@@ -127,7 +138,16 @@ export default function ChitietDon() {
                   Đánh dấu thanh toán
                 </button>
               ) : (
-                ""
+                <div>
+                  <div className="hidden"><PrintHoadon 
+                  ref={componentRef} type={chitiet.type} name2={name2} data={data} id={chitiet.id} note={chitiet.note} time={chitiet.time} /></div>
+                <button
+                className="bg-blue-600 py-2 px-4 w-52 rounded-lg mt-4"
+                onClick={print}
+              >
+                In đơn
+              </button>
+              </div>
               )}
             </div>
           </div>

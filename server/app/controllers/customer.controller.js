@@ -10,11 +10,19 @@ exports.create = async (req, res, next) => {
     let email = req.body.email;
     let ngayhoptac = req.body.ngayhoptac;
 
-    if(!name || !sdt || !diachi || !email || !ngayhoptac) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
-    pool.execute(`INSERT INTO khachhang (name, sdt, diachi, email, ngayhoptac) VALUES ('${name}',${sdt},'${diachi}','${email}',DATE('${ngayhoptac}'))`, (err) => {
-        if(err) return next(new BadRequestError(500, "Lỗi khi thêm mới"));
-        res.send({message:"success"});
-    });
+    pool.execute(`SELECT COUNT(id) a FROM khachhang WHERE name='${name}'`,(err, rows) => {
+        if(rows[0].a > 0){
+            res.send({ message: 'exists' });
+        }else{
+
+            if(!name || !sdt || !diachi || !email || !ngayhoptac) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
+            pool.execute(`INSERT INTO khachhang (name, sdt, diachi, email, ngayhoptac) VALUES ('${name}',${sdt},'${diachi}','${email}',DATE('${ngayhoptac}'))`, (err) => {
+                if(err) return next(new BadRequestError(500, "Lỗi khi thêm mới"));
+                res.send({message:"success"});
+            });
+        }
+    })
+
 
 };
 
@@ -34,10 +42,19 @@ exports.update = async (req, res, next) => {
     let email = req.body.email;
     let ngayhoptac = req.body.ngayhoptac;
     if(!name || !sdt || !diachi || !email || !ngayhoptac) return next(new BadRequestError(500, "Thông tin chưa đầy đủ"));
+
     
-    pool.execute(`UPDATE khachhang SET name='${name}',sdt=${sdt},diachi='${diachi}',email='${email}',ngayhoptac=DATE('${ngayhoptac}') WHERE id=${req.params.id}`, (err) => {
-        if(err) return next(new BadRequestError(500, "Lỗi khi cập nhật dữ liệu"));
-        res.send({message:"success"});
+    
+    pool.execute(`SELECT COUNT(id) a FROM khachhang WHERE name='${name}'`,(err, rows) => {
+        if(rows[0].a > 0){
+            res.send({ message: 'exists' });
+        }else{
+
+            pool.execute(`UPDATE khachhang SET name='${name}',sdt=${sdt},diachi='${diachi}',email='${email}',ngayhoptac=DATE('${ngayhoptac}') WHERE id=${req.params.id}`, (err) => {
+                if(err) return next(new BadRequestError(500, "Lỗi khi cập nhật dữ liệu"));
+                res.send({message:"success"});
+            })
+        }
     })
 };
 

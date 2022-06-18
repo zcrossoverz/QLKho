@@ -88,6 +88,8 @@ export default function EditHanghoa() {
         const res = await hanghoaServices.edit(id, name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM);
         if(res.message === 'success'){
             succesToast("Sửa hàng hóa thành công!");
+        }else if(res.message === 'exists'){
+          errorToast("Trùng tên hàng hóa cũ!");
         }
     }
 

@@ -55,6 +55,8 @@ export default function EditKhachhang() {
     const res = await khachhangServices.edit(id, name, parseInt(sdt), email, diachi, formatDate(ngayhoptac));
     if(res.message === 'success'){
         succesToast("Cập nhật thành công!");
+    }else if(res.message === 'exists'){
+      errorToast("Trùng tên khách hàng cũ!");
     }
   };
 

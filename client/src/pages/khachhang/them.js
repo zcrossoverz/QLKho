@@ -45,6 +45,8 @@ export default function ThemKhachhang() {
     );
     if (res.message === "success") {
       succesToast("Thêm mới thành công!");
+    } else if(res.message === 'exists'){
+      errorToast("Trùng tên khách hàng cũ");
     } else {
       console.log(res);
     }

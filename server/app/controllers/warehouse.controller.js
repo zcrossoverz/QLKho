@@ -123,7 +123,7 @@ exports.getInfoDon = async (req, res, next) => {
 }
 
 exports.getDataDon = async (req, res, next) => {
-    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.name FROM chitietdonhang a, hanghoa b WHERE idDH=${req.params.id} AND a.idHH=b.id`, (err, rows) => {
+    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.name, c.name dvt FROM chitietdonhang a, hanghoa b, donvitinh c WHERE idDH=${req.params.id} AND a.idHH=b.id AND b.idDVT=c.id`, (err, rows) => {
         if(err) return next(new BadRequestError(500, "Error"));
         res.send(rows);
     });

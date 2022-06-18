@@ -4,7 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import Sidebar from '../../components/dashboard/sidebar'
 import HeaderDashboard from '../../components/header';
 import * as danhmucServices from "../../services/danhmucServices";
-import { succesToast } from '../../utils/toast';
+import { errorToast, succesToast } from '../../utils/toast';
 
 export default function EditDanhmuc() {
   let { id } = useParams();
@@ -24,8 +24,12 @@ export default function EditDanhmuc() {
 
   const edit = async () => {
     const res = await danhmucServices.edit(id, newName);
-    if(res.message === 'success') succesToast("Cập nhật thành công");
-    getData();
+    if(res.message === 'success') {
+      succesToast("Cập nhật thành công");
+      getData();
+    }else if(res.message === 'exists'){
+      errorToast('Trùng tên danh mục cũ!');
+    }
   };
 
 

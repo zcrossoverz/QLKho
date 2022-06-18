@@ -7,19 +7,34 @@ exports.create = async (req, res, next) => {
 
     if(!name) return next(new BadRequestError(500, "Thông tin chưa đầy đủ!"));
 
-    pool.execute(`INSERT INTO danhmuc (name) VALUES ('${name}');`, (err) => {
-        if(err) return next(new BadRequestError(500,`Có lỗi khi thêm vào data ${err}`));
-        res.send({message:"success"});
+    pool.execute(`SELECT COUNT(id) a FROM danhmuc WHERE name='${name}'`,(err, rows) => {
+        if(rows[0].a > 0) {
+            res.send({message:'exists'});
+        }else{
+            pool.execute(`INSERT INTO danhmuc (name) VALUES ('${name}');`, (err) => {
+                if(err) return next(new BadRequestError(500,`Có lỗi khi thêm vào data ${err}`));
+                res.send({message:"success"});
+            });
+        }
     });
+
 };
 
 // sửa danh mục
 exports.update = async (req, res, next) => {
     let name = req.body.name;
     if(!name) return next(new BadRequestError(500, "Thông tin không đầy đủ"));
-    pool.execute(`UPDATE danhmuc SET name='${name}' WHERE id=${req.params.id}`, (err) => {
-        if(err) return next(new BadRequestError(500, "Lỗi khi cập nhật dữ liệu"));
-        res.send({message:"success"});
+
+    pool.execute(`SELECT COUNT(id) a FROM danhmuc WHERE name='${name}'`,(err, rows) => {
+        if(rows[0].a > 0) {
+            res.send({message:'exists'});
+        }else{
+
+            pool.execute(`UPDATE danhmuc SET name='${name}' WHERE id=${req.params.id}`, (err) => {
+                if(err) return next(new BadRequestError(500, "Lỗi khi cập nhật dữ liệu"));
+                res.send({message:"success"});
+            });
+        }
     });
 };
 

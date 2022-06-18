@@ -5,7 +5,7 @@ import HeaderDashboard from "../../components/header";
 import * as danhmucService from "../../services/danhmucServices";
 import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 
-import { succesToast } from "../../utils/toast";
+import { errorToast, succesToast } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
 
 export default function Danhmuc() {
@@ -38,6 +38,8 @@ export default function Danhmuc() {
         if(res.message === 'success') {
           succesToast("Thêm danh mục thành công!!");
           getListCategory();
+        }else if(res.message === 'exists'){
+          errorToast("Trùng tên danh mục cũ!");
         }
       } catch (error) {
         console.log(error);

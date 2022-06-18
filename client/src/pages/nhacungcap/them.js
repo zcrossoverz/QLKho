@@ -45,7 +45,9 @@ export default function ThemNhacungcap() {
     );
     if (res.message === "success") {
       succesToast("Thêm mới thành công!");
-    } else {
+    } else if(res.message === 'exists') {
+      errorToast("Trùng tên nhà cung cấp cũ!");
+    }else {
       console.log(res);
     }
   };

@@ -5,7 +5,7 @@ import HeaderDashboard from "../../components/header";
 import * as donvitinhServices from "../../services/donvitinhServices";
 import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
 
-import { succesToast } from "../../utils/toast";
+import { errorToast, succesToast } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
 
 export default function Donvitinh() {
@@ -38,6 +38,8 @@ export default function Donvitinh() {
         if(res.message === 'success') {
           succesToast("Thêm đơn vị tính thành công!!");
           getListUnit();
+        }else if(res.message === 'exists'){
+          errorToast("Trùng tên đơn vị tính!");
         }
       } catch (error) {
         console.log(error);

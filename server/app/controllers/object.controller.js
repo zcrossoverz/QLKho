@@ -13,10 +13,17 @@ exports.create = async (req, res, next) => {
 
     if(!name || !gianhap || !giabanle || !giabansi || !idNCC || !idDVT || !idDM) return next(new BadRequestError(500, "Thông tin chưa đầy đủ!"));
 
-    pool.execute(`INSERT INTO hanghoa (name,gianhap,giabanle,giabansi,idNCC,idDVT,idDM) VALUES ('${name}',${gianhap},${giabanle},${giabansi},${idNCC},${idDVT},${idDM});`, (err, rows) => {
-        if(err) return next(new BadRequestError(500,`Có lỗi khi thêm vào data ${err}`));
-        res.send({message:"success"});
+    pool.execute(`SELECT COUNT(id) a FROM hanghoa WHERE name='${name}'`,(err, rows) => {
+         if(rows[0].a > 0) {
+            res.send({ message:'exists' });
+         }else{
+            pool.execute(`INSERT INTO hanghoa (name,gianhap,giabanle,giabansi,idNCC,idDVT,idDM) VALUES ('${name}',${gianhap},${giabanle},${giabansi},${idNCC},${idDVT},${idDM});`, (err, rows) => {
+                if(err) return next(new BadRequestError(500,`Có lỗi khi thêm vào data ${err}`));
+                res.send({message:"success"});
+            });
+         }
     });
+
 
 };
 
@@ -30,11 +37,19 @@ exports.update = async (req, res, next) => {
     let idDVT = req.body.idDVT; // id đơn vị tính
     let idDM = req.body.idDM; // id danh mục
 
-    if(!name || !gianhap || !giabanle || !giabansi || !idNCC || !idDVT || !idDM) return next(new BadRequestError(500, "Thông tin chưa đầy đủ!"));
-    pool.execute(`UPDATE hanghoa SET name='${name}',gianhap=${gianhap},giabanle=${giabanle},giabansi=${giabansi},idNCC=${idNCC},idDM=${idDM},idDVT=${idDVT} WHERE id=${req.params.id}`, (err,rows) => {
-        if(err) return next(new BadRequestError(500,"Lỗi khi cập nhật dữ liệu"));
-        res.send({message:"success"});
+
+    pool.execute(`SELECT COUNT(id) a FROM hanghoa WHERE name='${name}'`,(err, rows) => {
+        if(rows[0].a > 0){
+            res.send({message:'exists'});
+        }else{
+            if(!name || !gianhap || !giabanle || !giabansi || !idNCC || !idDVT || !idDM) return next(new BadRequestError(500, "Thông tin chưa đầy đủ!"));
+            pool.execute(`UPDATE hanghoa SET name='${name}',gianhap=${gianhap},giabanle=${giabanle},giabansi=${giabansi},idNCC=${idNCC},idDM=${idDM},idDVT=${idDVT} WHERE id=${req.params.id}`, (err,rows) => {
+                if(err) return next(new BadRequestError(500,"Lỗi khi cập nhật dữ liệu"));
+                res.send({message:"success"});
+            });
+        }
     });
+    
 
 };
 
