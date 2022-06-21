@@ -47,6 +47,15 @@ export const getOne = async (id) => {
     }
 };
 
+export const getLichsu = async (id) => {
+    try {
+        const res = await request.get(`/warehouse/lichsu/${id}`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const edit = async (id, name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM) => {
     try {
         const res = await request.put(`/object/${id}`, {name, gianhap, giabanle, giabansi, idNCC, idDVT, idDM});

@@ -55,6 +55,15 @@ export const getTonKho = async() => {
     }
 }
 
+export const getSPTonKho = async(id) => {
+    try {
+        const res = await request.get(`/warehouse/kho/${id}`);
+        return res;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getDonChuaTT = async() => {
     try {
         const res = await request.get('/warehouse/chuatt');

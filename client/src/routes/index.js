@@ -19,7 +19,7 @@ import ThemDonnhap from "../pages/khohang/themdonnhap";
 import ThemDonxuat from "../pages/khohang/themdonxuat";
 import ChitietDon from "../pages/khohang/chitiet";
 import Baocao from "../pages/baocao";
-import { PrintHoadon } from "../pages/khohang/print";
+import Lichsu from "../pages/hanghoa/lichsu";
 
 
 
@@ -37,6 +37,7 @@ const publicRoutes = [
     { path:"/hanghoa", component: Hanghoa },
     { path:"/hanghoa/them", component: ThemHanghoa },
     { path:"/hanghoa/edit/:id", component: EditHanghoa },
+    { path:"/hanghoa/lichsu/:id", component: Lichsu },
     { path:"/khachhang", component: Khachhang },
     { path:"/khachhang/them", component: ThemKhachhang },
     { path:"/khachhang/edit/:id", component: EditKhachhang },
@@ -45,7 +46,6 @@ const publicRoutes = [
     { path:"/nhacungcap/edit/:id", component: EditNhacungcap },
     { path:"/taikhoan", component: Taikhoan },
     { path:"/baocao", component: Baocao },
-    { path:"/in", component: PrintHoadon },
 ];
 
 const privateRoutes = [

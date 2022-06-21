@@ -78,8 +78,12 @@ export default function ThemDonxuat() {
   };
 
   const addToListSP = () => {
-    setTotalPrice(totalPrice+(num*gia));
-    setListSP((e) => [...e, { name: selectHH.label, num, total: num*gia, id:selectHH.value }]);
+    if(num > max) {
+      errorToast("Số lượng chọn vượt quá số hàng trong kho!");
+    }else{
+      setTotalPrice(totalPrice+(num*gia));
+      setListSP((e) => [...e, { name: selectHH.label, num, total: num*gia, id:selectHH.value }]);
+    }
   };
 
 

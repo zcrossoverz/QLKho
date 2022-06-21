@@ -20,7 +20,9 @@ module.exports = (app) => {
     router.get("/datadon/:id", warehouse.getDataDon);
     router.get("/thanhtoan/:id", warehouse.thanhtoan);
     router.get("/:id", warehouse.getOne);
+    router.get("/kho/:id", warehouse.getInfoSPTonKho);
     router.get("/chitiet/:id", warehouse.detail);
+    router.get("/lichsu/:id", warehouse.getLichsu);
     router.delete("/:id", warehouse.delete);
 
     app.use("/api/warehouse", router);

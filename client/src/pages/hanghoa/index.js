@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../../components/dashboard/sidebar";
 import HeaderDashboard from "../../components/header";
 import * as hanghoaServices from "../../services/hanghoaServices";
-import { PencilIcon, TrashIcon } from "@heroicons/react/outline";
+import { PencilIcon, PresentationChartBarIcon, TrashIcon } from "@heroicons/react/outline";
 
 import { succesToast } from "../../utils/toast";
 import { ToastContainer } from "react-toastify";
@@ -54,7 +54,15 @@ export default function Hanghoa() {
             <PencilIcon
               className="h-5"
               onClick={() => {
-                navigate(`/hanghoa/edit/${props.id}`, { replace: true });
+                navigate(`/hanghoa/edit/${props.id}`, { replace: false });
+              }}
+            />
+          </button>
+          <button className="hover:text-blue-600 p-4">
+            <PresentationChartBarIcon
+              className="h-5"
+              onClick={() => {
+                navigate(`/hanghoa/lichsu/${props.id}`, { replace: false });
               }}
             />
           </button>
@@ -66,6 +74,7 @@ export default function Hanghoa() {
               }}
             />
           </button>
+          
         </td>
       </tr>
     );

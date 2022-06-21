@@ -32,11 +32,25 @@ exports.taoDonHang = async (req, res, next) => {
             pool.execute(`INSERT INTO kho (idHH, tonkho) SELECT * FROM (SELECT ${e.idHH},0) AS tmp WHERE NOT EXISTS (SELECT idHH FROM kho WHERE idHH=${e.idHH}) LIMIT 1`, (err) => {
                 if(type === 1) {
                     if(status === 1) {
-                        pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+                        pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`, () => {
+                            pool.execute(`SELECT tonkho FROM kho WHERE idHH=${e.idHH}`,(err, rowsz) => {
+                                let today = new Date();
+                                let time_now = today.getHours()+':'+today.getMinutes()+':'+today.getSeconds()+' '+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+                                pool.execute(`INSERT INTO lichsu (idHH, idDH, type, number, tien, note, time, kho) VALUES (${e.idHH}, ${idDH}, ${type}, ${e.soluong}, ${e.gia}, '${note}', '${time_now}', ${rowsz[0].tonkho})`);
+                            });
+                        });
+                        
                     }
                 }else{
                     if(status === 1) {
-                        pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`);
+                        pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`, () => {
+                            pool.execute(`SELECT tonkho FROM kho WHERE idHH=${e.idHH}`,(err, rowsz) => {
+                                let today = new Date();
+                                let time_now = today.getHours()+':'+today.getMinutes()+':'+today.getSeconds()+' '+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+                                pool.execute(`INSERT INTO lichsu (idHH, idDH, type, number, tien, note, time, kho) VALUES (${e.idHH}, ${idDH}, ${type}, ${e.soluong}, ${e.gia}, '${note}', '${time_now}', ${rowsz[0].tonkho})`);
+                            });
+                        });
+                        
                     }
                 }
             });
@@ -47,6 +61,14 @@ exports.taoDonHang = async (req, res, next) => {
 
 
 };
+
+
+exports.getLichsu = async (req, res, next) => {
+    pool.execute(`SELECT * FROM lichsu WHERE idHH=${req.params.id} ORDER BY id DESC`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    })
+}
 
 // get full list don hang
 exports.getList = async (req, res, next) => {
@@ -130,16 +152,30 @@ exports.getDataDon = async (req, res, next) => {
 };
 
 exports.thanhtoan = async (req, res, next) => {
-    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.type FROM chitietdonhang a, donhang b WHERE a.idDH=b.id AND a.idDH=${req.params.id}`, (err, rows)=> {
+    pool.execute(`SELECT a.id, a.idHH, a.idDH, a.soluong, a.gia, b.type, b.note FROM chitietdonhang a, donhang b WHERE a.idDH=b.id AND a.idDH=${req.params.id}`, (err, rows)=> {
         if(err) return next(new BadRequestError(500, "Error"));
         rows.map(e => {
             if(e.type===1){
-                pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`);
+                pool.execute(`UPDATE kho SET tonkho=tonkho+${e.soluong} WHERE idHH=${e.idHH}`, () => {
+                    pool.execute(`SELECT tonkho FROM kho WHERE idHH=${e.idHH}`, (err, rowsz) => {
+                        let today = new Date();
+                        let time_now = today.getHours()+':'+today.getMinutes()+':'+today.getSeconds()+' '+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+                        pool.execute(`INSERT INTO lichsu (idHH, idDH, type, number, tien, note, time, kho) VALUES (${e.idHH}, ${e.idDH}, ${e.type}, ${e.soluong}, ${e.gia}, '${e.note}', '${time_now}', ${rowsz[0].tonkho})`);
+                    });
+                });
                 pool.execute(`UPDATE doanhthu SET tienvon=tienvon+${e.gia} WHERE idHH=${e.idHH}`);
             }else{
-                pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`);
+                pool.execute(`UPDATE kho SET tonkho=tonkho-${e.soluong}, daban=daban+${e.soluong} WHERE idHH=${e.idHH}`,() => {
+                    pool.execute(`SELECT tonkho FROM kho WHERE idHH=${e.idHH}`, (err, rowsz) => {
+                        let today = new Date();
+                        let time_now = today.getHours()+':'+today.getMinutes()+':'+today.getSeconds()+' '+today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+                        pool.execute(`INSERT INTO lichsu (idHH, idDH, type, number, tien, note, time, kho) VALUES (${e.idHH}, ${e.idDH}, ${e.type}, ${e.soluong}, ${e.gia}, '${e.note}', '${time_now}', ${rowsz[0].tonkho})`);
+                    });
+                });
                 pool.execute(`UPDATE doanhthu SET tienban=tienban+${e.gia} WHERE idHH=${e.idHH}`);
             }
+
+            
         });
     });
     pool.execute(`UPDATE donhang SET status = 1 WHERE id=${req.params.id}`, (err)=> {
@@ -150,6 +186,13 @@ exports.thanhtoan = async (req, res, next) => {
 
 exports.getSPTonKho = async (req, res, next) => {
     pool.execute(`SELECT a.id, a.idHH, a.daban, a.tonkho, b.name, b.giabansi, b.giabanle, c.name dvt, d.name name_ncc,e.name name_dm FROM kho a, hanghoa b, donvitinh c, nhacungcap d, danhmuc e WHERE tonkho>0 AND a.idHH=b.id AND b.idDVT=c.id AND b.idNCC=d.id AND b.idDM=e.id`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
+
+exports.getInfoSPTonKho = async (req, res, next) => {
+    pool.execute(`SELECT a.id, a.idHH, a.daban, a.tonkho, b.name, b.giabansi, b.giabanle, c.name dvt, d.name name_ncc,e.name name_dm FROM kho a, hanghoa b, donvitinh c, nhacungcap d, danhmuc e WHERE a.idHH=b.id AND b.idDVT=c.id AND b.idNCC=d.id AND b.idDM=e.id AND b.id=${req.params.id} ORDER BY id ASC`, (err, rows) => {
         if(err) return next(new BadRequestError(500, "Error"));
         res.send(rows);
     });
