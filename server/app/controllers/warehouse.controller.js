@@ -237,3 +237,19 @@ exports.baoCaoDoanhso = async (req, res, next) => {
         res.send(rows);
     });
 };
+
+exports.getDSDayAll = async (req, res, next) => {
+    pool.execute(`SELECT SUM(tien) tien FROM lichsu WHERE time LIKE '% ${req.body.time}' AND type = 2 GROUP BY type`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error "+err));
+        // console.log(`SELECT SUM(tien) FROM lichsu WHERE time LIKE '% ${req.body.time}' AND type = 2 GROUP BY type`);
+        res.send(rows[0]);
+    });
+};
+
+
+exports.getDSDayOne = async (req, res, next) => {
+    pool.execute(`SELECT SUM(tien), idHH FROM lichsu WHERE time LIKE '% ${req.body.time}' AND type = 2 GROUP BY idHH`, (err, rows) => {
+        if(err) return next(new BadRequestError(500, "Error"));
+        res.send(rows);
+    });
+};
