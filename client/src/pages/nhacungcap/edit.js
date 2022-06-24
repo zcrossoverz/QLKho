@@ -125,7 +125,7 @@ export default function EditNhacungcap() {
                   : "w-44 bg-pink-800 px-10 py-2 rounded-lg text-pink-100 hover:text-white hover:bg-pink-500 hover:shadow-pink leading-loose"
               }
             >
-              Thêm
+              Cập nhật
             </button>
           </form>
         </div>

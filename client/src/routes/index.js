@@ -1,4 +1,3 @@
-import Login from "../pages/login";
 import Dashboard from "../pages/dashboard";
 import Donvitinh from "../pages/donvitinh";
 import Danhmuc from "../pages/danhmuc";
@@ -24,7 +23,6 @@ import Lichsu from "../pages/hanghoa/lichsu";
 
 
 const publicRoutes = [
-    { path:"/login", component: Login },
     { path:"/", component: Dashboard },
     { path:"/donvitinh", component: Donvitinh },
     { path:"/donvitinh/edit/:id", component: EditDonvitinh },
