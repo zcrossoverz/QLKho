@@ -126,7 +126,8 @@ export default function ThemDonxuat() {
 
   const handleForm = (e) => {
     e.preventDefault();
-    addNew();
+    if(listSP.length !== 0) addNew();
+    else errorToast("Đơn trống!");
   };
 
   const chitietdonHandle = (e) => {

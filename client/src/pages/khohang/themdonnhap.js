@@ -109,7 +109,8 @@ export default function ThemDonnhap() {
 
   const handleForm = (e) => {
     e.preventDefault();
-    addNew();
+    if(listSP.length !== 0) addNew();
+    else errorToast('Đơn hàng trống!');
   };
 
   const chitietdonHandle = (e) => {
